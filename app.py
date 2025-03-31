@@ -677,14 +677,14 @@ all_features = sorted(set(features_cost).union(set(features_dtf)))
 
 # === UI Setup ===
 st.set_page_config(page_title="Maintenance & Failure Predictor", layout="centered")
-st.title("🔧 Predict Maintenance Cost & Days Till Failure")
+st.title("Predict Maintenance Cost & Days Till Failure")
 
-mode = st.sidebar.radio("Select Mode", ["🧮 Manual Input", "📂 Upload CSV File"])
+mode = st.sidebar.radio("Select Mode", ["Manual Input", "Upload CSV File"])
 RISK_THRESHOLD = 7  # Days to classify HIGH RISK
 
 # === Manual Input Mode ===
-if mode == "🧮 Manual Input":
-    st.subheader("✍️ Enter Equipment Parameters")
+if mode == "Manual Input":
+    st.subheader("Enter Equipment Parameters")
     input_data = {}
     for feature in all_features:
         input_data[feature] = st.number_input(f"{feature}", value=0.0)
@@ -698,8 +698,8 @@ if mode == "🧮 Manual Input":
         dtf_pred = model_dtf.predict(x_dtf)[0]
         risk = dtf_pred <= RISK_THRESHOLD
 
-        st.success(f"💰 **Predicted Maintenance Cost:** ${cost_pred:,.2f}")
-        st.success(f"📆 **Estimated Days Till Failure:** {int(dtf_pred)} days")
+        st.success(f"**Predicted Maintenance Cost:** ${cost_pred:,.2f}")
+        st.success(f"**Estimated Days Till Failure:** {int(dtf_pred)} days")
 
         if risk:
             st.error("⚠️ HIGH RISK: Equipment may fail within a week!")
@@ -707,8 +707,8 @@ if mode == "🧮 Manual Input":
             st.info("✅ Low failure risk in the next 7 days.")
 
 # === CSV Upload Mode ===
-elif mode == "📂 Upload CSV File":
-    st.subheader("📁 Upload CSV File")
+elif mode == "Upload CSV File":
+    st.subheader("Upload CSV File")
     uploaded_file = st.file_uploader("Upload a CSV with input features", type=["csv"])
 
     if uploaded_file:
@@ -757,7 +757,7 @@ elif mode == "📂 Upload CSV File":
 
         def tag_cost_opportunity(row):
             if row["Risk_Level"] != "🔴 HIGH" and row["Predicted_Maintenance_Cost"] <= COST_THRESHOLD:
-                return "💸 Cost-Optimized Opportunity"
+                return "Cost-Optimized Opportunity"
             return ""
 
         df["Cost_Opportunity_Tag"] = df.apply(tag_cost_opportunity, axis=1)
@@ -782,10 +782,10 @@ elif mode == "📂 Upload CSV File":
         if num_risks > 0:
             st.warning(f"⚠️ {num_risks} equipment units are at risk of failure within 7 days!")
         else:
-            st.success("🎉 No equipment units are predicted to fail in the next 7 days.")
+            st.success("No equipment units are predicted to fail in the next 7 days.")
 
         # === Maintenance Priority Schedule ===
-        st.markdown("## 🛠️ Maintenance Priority Schedule")
+        st.markdown("## Maintenance Priority Schedule")
 
         schedule_cols = [
             "Equipment_ID" if "Equipment_ID" in df.columns else df.columns[0],
